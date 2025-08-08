@@ -15,7 +15,8 @@ return {
 		}
 
 		local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
-		vim.api.nvim_create_augroup({
+
+		vim.api.nvim_create_autocmd({
 			"BufEnter",
 			"BufWritePost",
 			"InsertLeave",
@@ -28,6 +29,6 @@ return {
 
 		vim.keymap.set("n", "<leader>ml", function()
 			lint.try_lint()
-		end)
+		end, { desc = "Manually lint file" })
 	end,
 }
