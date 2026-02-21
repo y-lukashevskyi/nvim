@@ -16,5 +16,5 @@ local opts = { noremap = true, silent = true }
 
 vim.keymap.set('n', '<C-s>', '<cmd> w <CR>', opts);
 
-vim.keymap.set("n", "<Leader>er", "<cmd> e . <CR>", merge_ops( opts, { desc = "Open Oil at project root"}))
-vim.keymap.set("n", "<Leader>e", "<cmd>edit %:p:h<CR>", merge_ops(opts, {desc = "Open Oil in PWD"}))
+--vim.keymap.set("n", "<Leader>er", "<cmd> e . <CR>", merge_ops( opts, { desc = "Open Oil at project root"}))
+--vim.keymap.set("n", "<Leader>e", "<cmd>edit %:p:h<CR>", merge_ops(opts, {desc = "Open Oil in PWD"}))
