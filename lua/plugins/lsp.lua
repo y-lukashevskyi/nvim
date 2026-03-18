@@ -11,7 +11,7 @@ return {
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "ruby_lsp", "lua_ls" },
+        ensure_installed = { "ts_ls", "ruby_lsp", "lua_ls", "eslint" },
         automatic_installation = true,
       })
     end,
@@ -31,24 +31,15 @@ return {
       for _, server in ipairs(servers) do
         vim.lsp.config(server, { capabilities = capabilities })
       end
-      vim.lsp.enable(servers)
 
-      -- LSP keymaps (set when an LSP attaches to a buffer)
-      vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(ev)
-          local o = { buffer = ev.buf, noremap = true, silent = true }
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", o, { desc = "Go to definition" }))
-          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, vim.tbl_extend("force", o, { desc = "Go to declaration" }))
-          vim.keymap.set("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", o, { desc = "Find references" }))
-          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, vim.tbl_extend("force", o, { desc = "Go to implementation" }))
-          vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", o, { desc = "Hover docs" }))
-          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", o, { desc = "Rename symbol" }))
-          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", o, { desc = "Code action" }))
-          vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, vim.tbl_extend("force", o, { desc = "Line diagnostics" }))
-          vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, vim.tbl_extend("force", o, { desc = "Prev diagnostic" }))
-          vim.keymap.set("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", o, { desc = "Next diagnostic" }))
-        end,
+      vim.lsp.config("eslint", {
+        capabilities = capabilities,
+        handlers = {
+          ["textDocument/diagnostic"] = vim.lsp.diagnostic.on_diagnostic,
+        },
       })
+
+      vim.lsp.enable(vim.list_extend(servers, { "eslint" }))
     end,
   },
   -- Autocompletion
