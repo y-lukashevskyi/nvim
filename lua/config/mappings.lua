@@ -16,6 +16,12 @@ local opts = { noremap = true, silent = true }
 
 vim.keymap.set('n', '<C-s>', '<cmd> w <CR>', opts);
 
+-- Window navigation
+vim.keymap.set('n', '<C-h>', '<C-w>h', merge_ops(opts, { desc = "Move to left window" }))
+vim.keymap.set('n', '<C-j>', '<C-w>j', merge_ops(opts, { desc = "Move to lower window" }))
+vim.keymap.set('n', '<C-k>', '<C-w>k', merge_ops(opts, { desc = "Move to upper window" }))
+vim.keymap.set('n', '<C-l>', '<C-w>l', merge_ops(opts, { desc = "Move to right window" }))
+
 --vim.keymap.set("n", "<Leader>er", "<cmd> e . <CR>", merge_ops( opts, { desc = "Open Oil at project root"}))
 --vim.keymap.set("n", "<Leader>e", "<cmd>edit %:p:h<CR>", merge_ops(opts, {desc = "Open Oil in PWD"}))
 
@@ -92,6 +98,12 @@ vim.keymap.set("n", "<leader>4", function() require("harpoon"):list():select(4) 
 -- Spectre
 vim.keymap.set("n", "<leader>sr", function() require("spectre").open() end, merge_ops(opts, { desc = "Find & replace (Spectre)" }))
 vim.keymap.set("n", "<leader>sw", function() require("spectre").open_visual({ select_word = true }) end, merge_ops(opts, { desc = "Replace current word (Spectre)" }))
+
+-- Folds
+vim.keymap.set("n", "<leader>zt", "za", merge_ops(opts, { desc = "Toggle fold" }))
+vim.keymap.set("n", "<leader>zT", function()
+	if vim.wo.foldlevel > 0 then vim.cmd("normal! zM") else vim.cmd("normal! zR") end
+end, merge_ops(opts, { desc = "Toggle all folds" }))
 
 -- Git (buffer-local, set on gitsigns attach)
 -- Note: actual gitsigns on_attach calls require("config.mappings").gitsigns_on_attach

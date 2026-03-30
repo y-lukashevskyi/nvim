@@ -11,7 +11,7 @@ return {
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "ruby_lsp", "lua_ls", "eslint" },
+        ensure_installed = { "ts_ls", "ruby_lsp", "lua_ls", "eslint", "typos_lsp" },
         automatic_installation = true,
       })
     end,
@@ -27,7 +27,7 @@ return {
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      local servers = { "ts_ls", "ruby_lsp", "lua_ls" }
+      local servers = { "ts_ls", "ruby_lsp", "lua_ls", "typos_lsp" }
       for _, server in ipairs(servers) do
         vim.lsp.config(server, { capabilities = capabilities })
       end
@@ -51,10 +51,12 @@ return {
       "hrsh7th/cmp-path",
       "L3MON4D3/LuaSnip",
       "saadparwaiz1/cmp_luasnip",
+      "rafamadriz/friendly-snippets",
     },
     config = function()
       local cmp = require("cmp")
       local luasnip = require("luasnip")
+      require("luasnip.loaders.from_vscode").lazy_load()
 
       cmp.setup({
         snippet = {
