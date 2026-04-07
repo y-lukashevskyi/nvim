@@ -105,6 +105,24 @@ vim.keymap.set("n", "<leader>zT", function()
 	if vim.wo.foldlevel > 0 then vim.cmd("normal! zM") else vim.cmd("normal! zR") end
 end, merge_ops(opts, { desc = "Toggle all folds" }))
 
+-- Toggle line wrap
+vim.keymap.set("n", "<leader>tw", "<cmd>set wrap!<cr>", merge_ops(opts, { desc = "Toggle line wrap" }))
+
+-- Octo (GitHub PRs)
+vim.keymap.set("n", "<leader>gPl", "<cmd>Octo pr list<cr>", merge_ops(opts, { desc = "List PRs" }))
+vim.keymap.set("n", "<leader>gPs", "<cmd>Octo pr search<cr>", merge_ops(opts, { desc = "Search PRs" }))
+vim.keymap.set("n", "<leader>gPr", "<cmd>Octo review start<cr>", merge_ops(opts, { desc = "Start review" }))
+vim.keymap.set("n", "<leader>gPS", "<cmd>Octo review submit<cr>", merge_ops(opts, { desc = "Submit review" }))
+vim.keymap.set({ "n", "v" }, "<leader>gPc", "<cmd>Octo comment add<cr>", merge_ops(opts, { desc = "Add review comment" }))
+
+-- Quick commit
+vim.keymap.set("n", "<leader>gc", function()
+	vim.ui.input({ prompt = "Commit message: " }, function(msg)
+		if not msg or msg == "" then return end
+		vim.cmd("!git add . && git commit -m " .. vim.fn.shellescape(msg))
+	end)
+end, merge_ops(opts, { desc = "Git add & commit" }))
+
 -- Git (buffer-local, set on gitsigns attach)
 -- Note: actual gitsigns on_attach calls require("config.mappings").gitsigns_on_attach
 local M = {}
