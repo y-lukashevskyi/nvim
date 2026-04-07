@@ -58,6 +58,7 @@ end, merge_ops(opts, { desc = "Theme picker (persistent)" }))
 
 vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", merge_ops(opts, { desc = "Find files" }))
 vim.keymap.set("n", "<leader>fw", "<cmd>Telescope live_grep<cr>", merge_ops(opts, { desc = "Live grep" }))
+vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", merge_ops(opts, { desc = "Recent files" }))
 
 vim.keymap.set("n", "<leader>gd", "<cmd>CodeDiff<cr>", merge_ops(opts, { desc = "Code diff" }))
 
