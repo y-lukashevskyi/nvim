@@ -2,6 +2,7 @@ require("config.lazy")
 require("config.mappings")
 
 vim.opt.clipboard = "unnamedplus"
+vim.opt.guicursor = "n-v-c:block-blinkon500,i-ci-ve:ver25-blinkon500,r-cr-o:hor20-blinkon500"
 
 -- Load saved theme or fall back to nord
 local theme_file = vim.fn.stdpath("config") .. "/.theme"
@@ -48,3 +49,14 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.o.winbar = "%{%v:lua.require('config.winbar').get()%}"
+
+vim.api.nvim_create_user_command('Pwf', function()
+  local path = vim.fn.fnamemodify(vim.fn.expand('%:p'), ':.')
+  vim.fn.setreg('+', path)
+  vim.notify(path, vim.log.levels.INFO)
+end, {})
+
+vim.api.nvim_create_user_command('RestartConfig', function()
+  vim.cmd('source $MYVIMRC')
+  vim.notify('Config reloaded', vim.log.levels.INFO)
+end, {})

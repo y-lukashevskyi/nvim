@@ -15,6 +15,7 @@ end
 local opts = { noremap = true, silent = true }
 
 vim.keymap.set('n', '<C-s>', '<cmd> w <CR>', opts);
+vim.keymap.set({ 'n', 'i', 'v' }, '\x1b[115;9u', '<cmd> w <CR>', opts);
 
 -- Window navigation
 vim.keymap.set('n', '<C-h>', '<C-w>h', merge_ops(opts, { desc = "Move to left window" }))

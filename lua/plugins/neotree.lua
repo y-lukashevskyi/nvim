@@ -9,6 +9,10 @@ return {
 		},
 		lazy = false, -- neo-tree will lazily load itself
 		opts = {
+			popup_border_style = "rounded",
+			window = {
+				position = "float",
+			},
 			filesystem = {
 				filtered_items = {
 					visible = true,
