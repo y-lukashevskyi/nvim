@@ -23,6 +23,19 @@ vim.keymap.set('n', '<C-j>', '<C-w>j', merge_ops(opts, { desc = "Move to lower w
 vim.keymap.set('n', '<C-k>', '<C-w>k', merge_ops(opts, { desc = "Move to upper window" }))
 vim.keymap.set('n', '<C-l>', '<C-w>l', merge_ops(opts, { desc = "Move to right window" }))
 
+-- Clear search highlight
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<cr>', opts)
+
+-- Keep cursor centered while scrolling and searching
+vim.keymap.set('n', '<C-d>', '<C-d>zz', opts)
+vim.keymap.set('n', '<C-u>', '<C-u>zz', opts)
+vim.keymap.set('n', 'n', 'nzzzv', opts)
+vim.keymap.set('n', 'N', 'Nzzzv', opts)
+
+-- Keep selection after indenting in visual mode
+vim.keymap.set('v', '<', '<gv', opts)
+vim.keymap.set('v', '>', '>gv', opts)
+
 --vim.keymap.set("n", "<Leader>er", "<cmd> e . <CR>", merge_ops( opts, { desc = "Open Oil at project root"}))
 --vim.keymap.set("n", "<Leader>e", "<cmd>edit %:p:h<CR>", merge_ops(opts, {desc = "Open Oil in PWD"}))
 

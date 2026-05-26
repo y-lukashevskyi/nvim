@@ -4,6 +4,7 @@ return {
         'nvim-lua/plenary.nvim',
         -- optional but recommended
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+        'nvim-telescope/telescope-ui-select.nvim',
     },
     opts = {
         pickers = {
@@ -14,7 +15,17 @@ return {
                 additional_args = { "--hidden" },
             },
         },
+        extensions = {
+            fzf = {},
+            ["ui-select"] = {},
+        },
     },
+    config = function(_, opts)
+        local telescope = require("telescope")
+        telescope.setup(opts)
+        telescope.load_extension("fzf")
+        telescope.load_extension("ui-select")
+    end,
 }
 
 
