@@ -11,8 +11,11 @@ return {
     dependencies = { "williamboman/mason.nvim" },
     config = function()
       require("mason-lspconfig").setup({
-        ensure_installed = { "ts_ls", "ruby_lsp", "lua_ls", "eslint", "typos_lsp" },
+        ensure_installed = { "vtsls", "ruby_lsp", "lua_ls", "eslint", "typos_lsp" },
         automatic_installation = true,
+        -- We enable servers explicitly via vim.lsp.enable below; don't let
+        -- mason auto-enable every installed server (that double-attached ts_ls).
+        automatic_enable = false,
       })
     end,
   },
@@ -27,10 +30,33 @@ return {
     config = function()
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      local servers = { "ts_ls", "ruby_lsp", "lua_ls", "typos_lsp" }
+      -- Servers that only need default capabilities
+      local servers = { "ruby_lsp", "lua_ls", "typos_lsp" }
       for _, server in ipairs(servers) do
         vim.lsp.config(server, { capabilities = capabilities })
       end
+
+      -- TypeScript / JavaScript via vtsls (faster on large projects, richer code actions)
+      local ts_inlay_hints = {
+        parameterNames = { enabled = "literals" },
+        parameterTypes = { enabled = true },
+        variableTypes = { enabled = true },
+        propertyDeclarationTypes = { enabled = true },
+        functionLikeReturnTypes = { enabled = true },
+        enumMemberValues = { enabled = true },
+      }
+      vim.lsp.config("vtsls", {
+        capabilities = capabilities,
+        settings = {
+          typescript = { inlayHints = ts_inlay_hints },
+          javascript = { inlayHints = ts_inlay_hints },
+        },
+        -- Formatting is handled by prettier (via conform); don't let tsserver advertise it
+        on_attach = function(client)
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
+      })
 
       vim.lsp.config("eslint", {
         capabilities = capabilities,
@@ -39,7 +65,17 @@ return {
         },
       })
 
-      vim.lsp.enable(vim.list_extend(servers, { "eslint" }))
+      vim.lsp.enable({ "ruby_lsp", "lua_ls", "typos_lsp", "vtsls", "eslint" })
+
+      -- Turn inlay hints on for any server that supports them
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client:supports_method("textDocument/inlayHint") then
+            vim.lsp.inlay_hint.enable(true, { bufnr = args.buf })
+          end
+        end,
+      })
     end,
   },
   -- Autocompletion
