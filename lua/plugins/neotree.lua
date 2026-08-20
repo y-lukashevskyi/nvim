@@ -19,6 +19,7 @@ return {
 					hide_gitignored = true,
 					hide_dotfiles = false,
 					always_show = { ".env" },
+					never_show = { "node_modules", ".git", ".DS_Store" },
 				},
 			},
 		},

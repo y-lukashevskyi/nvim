@@ -15,7 +15,12 @@ end
 local opts = { noremap = true, silent = true }
 
 vim.keymap.set('n', '<C-s>', '<cmd> w <CR>', opts);
-vim.keymap.set({ 'n', 'i', 'v' }, '\x1b[115;9u', '<cmd> w <CR>', opts);
+
+-- Cmd+S saves in every mode. Ghostty sends it as CSI 115;9u, which Neovim
+-- decodes into <D-s> before looking up mappings -- so <D-s> is what has to be
+-- mapped; binding the raw escape sequence never matches. <Cmd> doesn't change
+-- mode, so this saves from insert without dropping to normal.
+vim.keymap.set({ 'n', 'i', 'v', 'x', 's', 'o' }, '<D-s>', '<Cmd>w<CR>', opts)
 
 -- Window navigation
 vim.keymap.set('n', '<C-h>', '<C-w>h', merge_ops(opts, { desc = "Move to left window" }))
@@ -88,6 +93,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "<leader>ln", vim.lsp.buf.rename, vim.tbl_extend("force", o, { desc = "Rename symbol" }))
 		vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, vim.tbl_extend("force", o, { desc = "Code action" }))
 		vim.keymap.set("n", "<leader>le", vim.diagnostic.open_float, vim.tbl_extend("force", o, { desc = "Line diagnostics" }))
+		-- Signature help: parameter list of the call under the cursor.
+		-- Normal mode keeps the <leader>l LSP prefix; insert mode uses <C-k>
+		-- (a leader mapping there would swallow " ls" while typing). Neovim's
+		-- own insert-mode default <C-s> still works too.
+		vim.keymap.set("n", "<leader>ls", vim.lsp.buf.signature_help, vim.tbl_extend("force", o, { desc = "Signature help" }))
+		vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, vim.tbl_extend("force", o, { desc = "Signature help" }))
 		vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, vim.tbl_extend("force", o, { desc = "Prev diagnostic" }))
 		vim.keymap.set("n", "]d", vim.diagnostic.goto_next, vim.tbl_extend("force", o, { desc = "Next diagnostic" }))
 	end,

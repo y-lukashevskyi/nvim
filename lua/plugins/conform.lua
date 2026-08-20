@@ -16,6 +16,7 @@ return {
 				yaml = prettier,
 				ruby = { "rubocop" },
 				lua = { "stylua" },
+				dart = { "dart_format" },
 			},
 			format_on_save = {
 				timeout_ms = 2000,
